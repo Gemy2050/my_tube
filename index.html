@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youtube Clone</title>
+  <link rel="shortcut icon" href="images/icon.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+      <div class="left">
+        <i class="fas fa-bars"></i>
+        <a href=""><img src="images/logo.png" alt="Logo" class="logo"></a>
+      </div>
+      <div class="mid">
+        <div class="form">
+          <div class="input-parent">
+            <div class="close">x</div>
+            <input type="search" class="search-phone" placeholder="Search" spellcheck="false" autofocus>
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+          </div>
+          <input type="search" class="search" placeholder="Search" spellcheck="false">
+          <button class="search"><i class="fas fa-search"></i></button>
+          <i class="fas fa-microphone microphone" ></i>
+        </div>
+      </div>
+      <div class="right">
+        <a href="" class="vid"><i class="fas fa-video"></i></a>
+        <a href=""><i class="far fa-bell"></i></a>
+        <a href=""><i class="fas fa-user-circle"></i></a>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div class="navbar hide">
+        <a href="" class="active">
+          <i class="fa fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="">
+          <i class="fas fa-file-video"></i>
+          <span>Shorts</span>
+        </a>
+        <a href="">
+          <i class="fa-solid fa-video"></i>
+          <span>Subscriptions</span>
+        </a>
+        <hr>
+        <a href="">
+          <i class="fa-regular fa-circle-play"></i>
+          <span>Library</span>
+        </a>
+        <a href="">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>History</span>
+        </a>
+        <a href="">
+          <i class="fa-regular fa-clock"></i>
+          <span>Watched Later</span>
+        </a>
+        <a href="">
+          <i class="fa-solid fa-list"></i>
+          <span>List</span>
+        </a>
+        <a href="">
+          <i class="fas fa-download"></i>
+          <span>Downloads</span>
+        </a>
+        <a href="">
+          <i class="fas fa-thumbs-up"></i>
+          <span>Liked Videos</span>
+        </a>
+        <a href="">
+          <i class="fa-solid fas fa-angle-down"></i>
+          <span>Show More</span>
+        </a>
+        <hr>
+        <h4>Subscriptions</h4>
+        <div class="subs">
+          <a href="">
+            <img src="images/img2.jpeg" alt="">
+            <span>FC Barcelona</span>
+          </a>
+          <a href="">
+            <img src="images/img1.jpg" alt="">
+            <span>Lionel Messi</span>
+          </a>
+          <a href="">
+            <img src="images/img3.jpg" alt="">
+            <span>Luis Suarez</span>
+          </a>
+          <a href="">
+            <img src="images/img4.jpeg" alt="">
+            <span>Neymar Jr</span>
+          </a>
+          <a href="">
+            <img src="images/cover1.jpeg" alt="">
+            <span>Bahget Saber</span>
+          </a>
+        </div>
+      </div>
+      <div class="content">
+        <!-- <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img3.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Luis Suarez All Goals With FC Barcelona 2014 - 2020</p>
+              <span>Barca TV <br> 10k views. 13 hours ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img4.jpeg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Neymar All Goals With FC Barcelona 2013 - 2018</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/cover2.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/cover1.jpeg" alt="">
+          <div class="description">
+            <img src="images/cover1.jpeg" alt="">
+            <div class="text">
+              <p>بهجت صابر بيسب أنون على الهواء و جنون حماده رده</p>
+              <span>Bahget Saber <br> 263k views. 1 Year ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/cover3.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>David Villia All Goals With FC Barcelona 2009 - 2013</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="images/img1.jpg" alt="">
+          <div class="description">
+            <img src="images/img2.jpeg" alt="">
+            <div class="text">
+              <p>Barcelona is preparing to negotiate with Lionel Messi</p>
+              <span>Barca TV <br> 10k views. 2 days ago</span>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="video-popup hide">
+        <span class="close">x</span>
+        <div class="list">
+            <!-- <div class="head">
+              <h1>List</h1>
+              <span>PlayList Title</span>
+            </div> -->
+            <div class="videos">
+              
+            </div>
+        </div>
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/qfPUMV9J5yw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="title"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

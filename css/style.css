@@ -367,6 +367,18 @@ header .right a:hover {
   background-color: #EEE;
 }
 
+@media (max-width: 900px) {
+  .video-popup {
+    flex-direction: column-reverse;
+  }
+  .video-popup .list {
+    width: 100%;
+    height: 300px;
+  }
+  .video-popup .video iframe {
+    height: 200px;
+}
+}
 
 .input-parent {
   display: none;

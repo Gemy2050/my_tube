@@ -25,9 +25,9 @@ document.querySelector(".video-popup .close").onclick = function() {
   document.body.style.overflow = 'auto';
   this.parentElement.classList.add("hide");
 }
-// document.querySelector(".input-parent .close").onclick = function() {
-//   document.querySelector(".input-parent").classList.remove("show")
-// }
+document.querySelector(".input-parent .close").onclick = function() {
+  document.querySelector(".input-parent").classList.remove("show")
+}
 
 searchInput.onkeyup = function(e) {
   if(e.key == "Enter") 
@@ -47,6 +47,14 @@ document.querySelector("button.search").onclick = ()=> {
   handleSearch(searchInput.value);
 }
 
+document.addEventListener("click", (e) => {
+  console.log(e.target);
+  if(e.target.className == 'search-btn' || e.target.parentElement.className == 'search-btn') {
+    console.log("Yes");
+    handleSearch(document.querySelector(".search-phone").value);
+    document.querySelector(".input-parent").classList.remove("show");
+  }
+})
 
 
 

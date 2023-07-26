@@ -71,8 +71,8 @@ async function getChannelVidoes() {
   }
 }
 
-// getChannelVidoes();
-handleSearch("Learn JavaScript, React in Arabic");
+// handleSearch("Learn JavaScript, React in Arabic");
+getChannelVidoes();
 
 
 function getVideos(data)  {

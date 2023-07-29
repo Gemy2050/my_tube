@@ -1,6 +1,10 @@
 let videosContainer = document.querySelector(".content");
+let list = document.querySelector(".list .videos");
 let bars = document.querySelector("header .left i");
 let searchInput = document.querySelector("input.search");
+
+
+let channels = localStorage.getItem("channels") ? JSON.parse(localStorage.getItem("channels")) : []
 
 
 const options = {
@@ -26,6 +30,8 @@ document.querySelector(".video-popup .close").onclick = function() {
   this.parentElement.classList.add("hide");
   document.querySelector(".video > iframe").src = '';
   document.querySelector(".video > .title").innerHTML = '';
+  list.innerHTML = '';
+  
 }
 document.querySelector(".input-parent .close").onclick = function() {
   document.querySelector(".input-parent").classList.remove("show")
@@ -36,9 +42,15 @@ searchInput.onkeyup = function(e) {
     document.querySelector("button.search").click()
 }
 
+if(document.querySelector(".search-phone")) {
+  document.querySelector(".search-phone").onkeyup = function(e) {
+    if(e.key == "Enter") 
+      document.querySelector(".search-btn").click()
+  }
+}
+
 document.querySelector("button.search").onclick = ()=> {
 
-  
   if(document.querySelector(".search-phone")) {
     document.querySelector(".input-parent").classList.add("show");
   }
@@ -56,11 +68,87 @@ document.addEventListener("click", (e) => {
   }
 })
 
+document.addEventListener("", (e) => {
+  if(e.key == "Backspace") {
+    document.querySelector(".video-popup").classList.add("hide")
+  }
+})
 
 
-async function getChannelVidoes() {
 
-  const url = 'https://youtube-v31.p.rapidapi.com/search?channelId=UCSNkfKl4cU-55Nm-ovsvOHQ&part=snippet%2Cid&order=date&maxResults=200';
+function setSubscribtions() {
+  document.querySelector(".subs").innerHTML = '';
+
+  channels.forEach((channel) => {
+    document.querySelector(".subs").innerHTML += `
+      <a href="#" data-channel=${channel.id} onclick="getChannelVidoes('${channel.id}')">
+        <img src="${channel.img.url}" alt="picture">
+        <span>${channel.title}</span>
+      </a>
+      `
+  })
+}
+
+setSubscribtions()
+
+
+document.querySelector("button.sub").addEventListener("click", (e) => {
+
+  let obj = {};
+
+  if(document.querySelector("button.sub").innerHTML == 'subscribed') {
+    document.querySelector("button.sub").innerHTML = 'subscribe';
+    document.querySelector(".video-popup .video .sub").style.background='red';
+    channels = channels.filter((el) => el.id !=  e.target.dataset.channel);
+    localStorage.setItem("channels", JSON.stringify(channels));
+    setSubscribtions();
+
+    return false;
+  } else {
+    document.querySelector("button.sub").innerHTML = 'subscribed';
+    document.querySelector(".video-popup .video .sub").style.background='#777';
+  }
+
+
+  
+  getChannelDetails(e.target.dataset.channel).then((data) => {
+    let item = data.items[0];
+    obj['id'] =  e.target.dataset.channel;
+    obj['img'] = item.snippet.thumbnails.high;
+    obj['cover'] = item.brandingSettings.image.bannerExternalUrl;
+    obj['title'] = item.snippet.title;
+    obj['description'] = item.snippet.description;
+    obj['subsCount'] = item.statistics.subscriberCount;
+
+    channels.push(obj);
+    localStorage.setItem("channels", JSON.stringify(channels));
+
+    setSubscribtions();
+  
+  });
+
+
+});
+
+
+
+async function getChannelDetails(id) {
+
+  const url = `https://youtube-v31.p.rapidapi.com/channels?part=snippet%2Cstatistics&id=${id}`;
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+async function getChannelVidoes(id) {
+
+  const url = `https://youtube-v31.p.rapidapi.com/search?channelId=${id}&part=snippet%2Cid&order=date&maxResults=200`;
 
   try {
     const response = await fetch(url, options);
@@ -71,8 +159,7 @@ async function getChannelVidoes() {
   }
 }
 
-// handleSearch("Learn JavaScript, React in Arabic");
-getChannelVidoes();
+handleSearch("Elzero Web School - Javasript");
 
 let isVideo = false;
 function getVideos(data)  {
@@ -82,7 +169,7 @@ function getVideos(data)  {
   
   data.items.forEach((item) => {
     videosContainer.innerHTML += `
-    <div class="box" data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
+    <div class="box" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
     <img src="${item.snippet.thumbnails.high.url}" alt="">
     <div class="description">
     
@@ -98,9 +185,7 @@ function getVideos(data)  {
   
   videosContainer.querySelectorAll(".box").forEach((vid) => {
     vid.addEventListener("click", (e) => {
-        console.log(isVideo);
         if(isVideo) {
-          console.log(vid.dataset.id, '--');
           document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1&enablejsapi=1&modestbranding=1`;
           document.querySelector(".video-popup iframe + .title").innerHTML = vid.dataset.title;
           getSuggestedVideos(vid.dataset.id);
@@ -108,6 +193,14 @@ function getVideos(data)  {
           getPlaylistVideos(vid.dataset.id);
         }
         document.querySelector(".video-popup").classList.remove("hide");
+        document.querySelector(".video-popup .video .sub").setAttribute("data-channel", vid.dataset.channel);
+        if(channels.find((el) => el.id == vid.dataset.channel)) {
+          document.querySelector(".video-popup .video .sub").innerHTML = "subscribed";
+          document.querySelector(".video-popup .video .sub").style.background='#777';
+        } else {
+          document.querySelector(".video-popup .video .sub").innerHTML = "subscribe";
+          document.querySelector(".video-popup .video .sub").style.background='red';
+        }
       })
     });
 
@@ -153,7 +246,6 @@ async function getSuggestedVideos(id) {
 
 
 function handlePlaylistVideos(data) {
-  let list = document.querySelector(".list .videos");
 
 
   if(!isVideo) {
@@ -162,11 +254,10 @@ function handlePlaylistVideos(data) {
     document.querySelector(".video-popup iframe + .title").innerHTML = data.items[0].snippet.title + ' ' + data.items[0].snippet.publishedAt.split("T")[0];
   }
 
-
   list.innerHTML = '';
   data.items.forEach((item, i) => {
     list.innerHTML += `
-      <div class='video' data-id=${item.snippet.resourceId?.videoId || item.id.videoId} data-title='${item.snippet.title} . ( ${item.snippet.publishedAt.split("T")[0]} )'>
+      <div class='video' data-channel=${item.snippet.channelId} data-id=${item.snippet.resourceId?.videoId || item.id.videoId} data-title='${item.snippet.title} . ( ${item.snippet.publishedAt.split("T")[0]} )'>
         <span class='num'>${i+1}</span>
         <div class='content'>
           <div>
@@ -183,8 +274,16 @@ function handlePlaylistVideos(data) {
     vid.addEventListener("click", (e) => {
       document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1`;
       document.querySelector(".video-popup .video iframe + .title").innerHTML = vid.dataset.title;
+      document.querySelector(".video-popup .video .sub").setAttribute("data-channel", vid.dataset.channel);
+      if(channels.find((el) => el.id == vid.dataset.channel)) {
+        document.querySelector(".video-popup .video .sub").innerHTML = "subscribed";
+        document.querySelector(".video-popup .video .sub").style.background='#777';
+      } else {
+        document.querySelector(".video-popup .video .sub").innerHTML = "subscribe";
+        document.querySelector(".video-popup .video .sub").style.background='red';
+      }
+      getSuggestedVideos(vid.dataset.id);
     })
-  })
-
+  });
 
 }

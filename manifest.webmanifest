@@ -3,8 +3,8 @@
   "background_color": "#FFF",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/index.html",
-  "name": "Utube App",
+  "start_url": "/my_tube/index.html",
+  "name": "Youtube App",
   "short_name": "Youtube Clone",
   "description": "awesome youtube clone",
   

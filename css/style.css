@@ -226,7 +226,7 @@ header .right a:hover {
   flex: 1;
   padding: 20px 15px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 50px 30px;
 }
 .content-area .content .box {
@@ -346,9 +346,8 @@ header .right a:hover {
   align-items: center;
   gap: 15px;
   font-size: 13px;
-  font-weight: bold;
   flex: 1;
-  font-size: 12px;
+  /* font-size: 13px !important; */
 }
 .video-popup .videos .video .content > div {
   flex: 1;
@@ -461,7 +460,11 @@ header .right a:hover {
   }
 }
 
-/* * {
+/* 
+
+Dark Mode
+
+* {
   background-color: #111 !important;
   color: white !important;
   box-shadow: #000;

@@ -43,7 +43,7 @@ document.querySelector("button.search").onclick = ()=> {
     document.querySelector(".input-parent").classList.add("show");
   }
   
-  if(!searchInput.value) 
+  if(!searchInput.value || searchInput.value == ' ') 
     return false;
 
   handleSearch(searchInput.value);

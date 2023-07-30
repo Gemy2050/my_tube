@@ -106,7 +106,7 @@ function setSubscribtions() {
 
   channels.forEach((channel) => {
     document.querySelector(".subs").innerHTML += `
-      <a href="#" data-channel=${channel.id} onclick="getChannelVidoes('${channel.id}')">
+      <a  data-channel=${channel.id} onclick="getChannelVidoes('${channel.id}')">
         <img src="${channel.img.url}" alt="picture">
         <span>${channel.title}</span>
       </a>
@@ -173,12 +173,12 @@ async function getChannelDetails(id) {
 
 async function getChannelVidoes(id) {
 
-  const url = `https://youtube-v31.p.rapidapi.com/search?channelId=${id}&part=snippet%2Cid&order=date&maxResults=200`;
+  const url = `https://youtube-v31.p.rapidapi.com/search?channelId=${id}&part=snippet%2Cid&maxResults=200`;
 
   try {
     const response = await fetch(url, options);
     const result = await response.json();
-    getVideos(result)
+    getVideos(result);
   } catch (error) {
     console.error(error);
   }
@@ -193,7 +193,9 @@ function getVideos(data)  {
   
   
   data.items.forEach((item) => {
-    isVideo = item.id.kind.includes("playlist") ? false : true;
+
+      isVideo = item.id.kind.includes("playlist") ? false : true;
+
     videosContainer.innerHTML += `
     <div class="box" data-playlist="${!isVideo}" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
       <div class='image' data-playlist="${!isVideo}">
@@ -213,7 +215,10 @@ function getVideos(data)  {
   
   videosContainer.querySelectorAll(".box").forEach((vid) => {
     vid.addEventListener("click", (e) => {
-        if(vid.dataset.playlist == "false") {
+      if(vid.dataset.id == "undefined") {
+        getChannelVidoes(vid.dataset.channel);
+        return false;
+      } else if(vid.dataset.playlist == "false") {
           document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1&enablejsapi=1&modestbranding=1`;
           document.querySelector(".video-popup iframe + .title").innerHTML = vid.dataset.title;
           getSuggestedVideos(vid.dataset.id);
@@ -226,17 +231,18 @@ function getVideos(data)  {
       })
     });
 
+  window.scrollTo({top: 0, behavior: "smooth"})
+
 }
 
 
 async function handleSearch(text) {
-  const url = `https://youtube-v31.p.rapidapi.com/search?q=${text}&part=snippet%2Cid&maxResults=200&order=date`;
+  const url = `https://youtube-v31.p.rapidapi.com/search?q=${text}&part=snippet%2Cid&maxResults=200`;
 
   try {
     const response = await fetch(url, options);
     const result = await response.json();
     getVideos(result);
-
     document.querySelector(".video-popup").classList.add("hide");
   } catch (error) {
     console.error(error);

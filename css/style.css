@@ -13,6 +13,7 @@ body {
   font-family: 'Roboto', sans-serif, Arial;
   padding-top: 60px;
   min-height: 100vh;
+  background-color: var(--main-bg);
 }
 ::-webkit-scrollbar {
   width: 10px;
@@ -37,9 +38,9 @@ header {
   justify-content: space-between;
   align-items: center;
   gap: 30px;
-  height: 56px;
+  height: 60px;
   padding: 0 10px;
-  box-shadow: 0 0 10px #DDD;
+  box-shadow: 0 0 10px #777;
   position: fixed;
   width: 100%;
   inset: 0;
@@ -56,9 +57,10 @@ header .left i {
   transition: .3s;
   padding: 10px;
   border-radius: 50%;
+  color: var(--main-color);
 }
 header .left i:hover {
-  background-color: #DDD;
+  background-color: #888;
 }
 header .left .logo {
   width: 100px;
@@ -119,6 +121,7 @@ header .mid .form button.search {
     display: none;
   }
   header .mid .form button.search {
+    color: var(--main-color);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -158,14 +161,14 @@ header .right a {
 header .mid .form button.search:hover,
 header .mid .form i:hover,
 header .right a:hover {
-  background-color: #DDD;
+  background-color: #888;
 }
 
 .content-area {
   display: flex;
   gap: 20px;
   height: (100vh - 56px);
-  /* background-color: #f9f9f9; */
+  background-color: var(--main-bg);
 }
 .content-area .navbar {
   width: 230px;
@@ -202,7 +205,10 @@ header .right a:hover {
 }
 .content-area .navbar a.active,
 .content-area .navbar a:hover {
-  background-color: #EEE;
+  background-color: #888;
+}
+.navbar .mode i.moon {
+  display: none;
 }
 .content-area .navbar a i {
   width: 20px;
@@ -232,9 +238,32 @@ header .right a:hover {
   cursor: pointer;
   text-align: center;
 }
-.content-area .content .box > img{
-  width: 100%;
+.content-area .content .box .image {
   height: 200px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.content-area .content .box .image[data-playlist="false"]::before {
+  display: none;
+}
+.content-area .content .box .image::before {
+  content: 'Playlist';
+  position: absolute;
+  width: 100%;
+  height: 35px;
+  left: 0;
+  bottom: 0;
+  background-image: linear-gradient(90deg, #0077ffb7, #009687b2);
+  color: #000000;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content-area .content .box .image img{
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   margin-bottom: 10px;
 }
@@ -254,6 +283,7 @@ header .right a:hover {
 .content-area .content .box .text p {
   font-size: 16px;
   margin-bottom: 5px;
+  color: var(--main-color);
 }
 .content-area .content .box .text span {
   color: #777;
@@ -274,7 +304,7 @@ header .right a:hover {
   width: 100%;
   height: 100%;
   top: 56px;
-  background-color: #EEE;
+  background-color: var(--main-bg);
   transition: .5s .2s;
   overflow: hidden;
   display: flex;
@@ -357,6 +387,9 @@ header .right a:hover {
   font-size: 12px;
   color: #777;
 }
+.list .num {
+  color: var(--main-color);
+}
 .video-popup .videos .video img {
   width: 100px;
   height: 60px;
@@ -382,37 +415,43 @@ header .right a:hover {
 @media (max-width: 767px) {
   .video-popup > div {
     width: 100%;
-    padding: 10px;
+    padding: 10px 0;
   }
 }
 .video-popup .video div.title {
   font-size: 20px;
   padding: 10px;
+  color: var(--main-color) !important;
 }
 .video-popup .list {
-  background-color: #EEE;
+  background-color: var(--main-bg);
 }
 .video-popup .list .video .num{
   min-width: 20px;
   font-size: 14px;
 }
 
+.video-popup .list .title {
+  color: var(--main-color) !important;
+}
 @media (max-width: 900px) {
   .video-popup {
     flex-direction: column-reverse;
     justify-content: start;
-    padding: 30px 15px;
+    padding: 30px 0;
   }
   .video-popup .list {
     width: 100%;
     height: 400px;
   }
-  .video-popup .video {
+  .video-popup > .video {
     max-height: 300px;
+    margin-bottom: 15px;
   }
-  .video-popup .video .title{
+  .video-popup .video iframe + .title{
     font-size: 16px !important;
     padding-bottom: 0 !important;
+    color: var(--main-color) !important;
   }
   .video-popup .video iframe {
     height: 200px;
@@ -437,7 +476,7 @@ header .right a:hover {
     left: 50%;
     top: 0;
     padding: 30px;
-    background-color: #DDD;
+    background-color: var(--main-bg);
     z-index: 1000;
     border-radius: 4px;
     box-shadow: 0 0 15px #777;
@@ -472,17 +511,3 @@ header .right a:hover {
     cursor: pointer;
   }
 }
-
-/* 
-
-Dark Mode
-
-* {
-  background-color: #111 !important;
-  color: white !important;
-  box-shadow: #000;
-  border-color: #0075ff !important;
-}
-header {
-  box-shadow: 0 0 15px #000;
-} */

@@ -6,6 +6,13 @@ let searchInput = document.querySelector("input.search");
 
 let channels = localStorage.getItem("channels") ? JSON.parse(localStorage.getItem("channels")) : []
 
+if(localStorage.getItem("mode") == "light") {
+  document.querySelector(".navbar .mode").classList.add("light")
+} else {
+  document.querySelector(".navbar .mode").classList.remove("light");
+}
+checkMode()
+
 
 const options = {
   method: "GET",
@@ -68,12 +75,30 @@ document.addEventListener("click", (e) => {
   }
 })
 
-document.addEventListener("", (e) => {
-  if(e.key == "Backspace") {
-    document.querySelector(".video-popup").classList.add("hide")
-  }
-})
+document.querySelector(".navbar .mode").onclick = function () {
 
+  this.classList.toggle("light");
+  checkMode();
+
+}
+
+
+
+function checkMode()  {
+  if(document.querySelector(".navbar .mode").classList.contains("light")) {
+    document.querySelector(".navbar .moon").style.display = "none";
+    document.querySelector(".navbar .sun").style.display = "block";
+    document.documentElement.style.setProperty("--main-color", "black");
+    document.documentElement.style.setProperty("--main-bg", "white");
+    localStorage.setItem("mode", "light");
+  } else {
+    document.querySelector(".navbar .sun").style.display = "none";
+    document.querySelector(".navbar .moon").style.display = "block";
+    document.documentElement.style.setProperty("--main-color", "white");
+    document.documentElement.style.setProperty("--main-bg", "#111");
+    localStorage.setItem("mode", "dark");
+  }
+}
 
 
 function setSubscribtions() {
@@ -159,7 +184,7 @@ async function getChannelVidoes(id) {
   }
 }
 
-handleSearch("Elzero Web School - Javasript");
+handleSearch("Javasript in arabic - elzero web school");
 
 let isVideo = false;
 function getVideos(data)  {
@@ -168,9 +193,13 @@ function getVideos(data)  {
   videosContainer.innerHTML = '';
   
   data.items.forEach((item) => {
+    let test = item.id.kind.includes("playlist") ? true : false;
+    console.log(item);
     videosContainer.innerHTML += `
     <div class="box" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
-    <img src="${item.snippet.thumbnails.high.url}" alt="">
+      <div class='image' data-playlist="${test}">
+        <img src="${item.snippet.thumbnails.high.url}" alt="">
+      </div>
     <div class="description">
     
     <div class="text">
@@ -194,13 +223,7 @@ function getVideos(data)  {
         }
         document.querySelector(".video-popup").classList.remove("hide");
         document.querySelector(".video-popup .video .sub").setAttribute("data-channel", vid.dataset.channel);
-        if(channels.find((el) => el.id == vid.dataset.channel)) {
-          document.querySelector(".video-popup .video .sub").innerHTML = "subscribed";
-          document.querySelector(".video-popup .video .sub").style.background='#777';
-        } else {
-          document.querySelector(".video-popup .video .sub").innerHTML = "subscribe";
-          document.querySelector(".video-popup .video .sub").style.background='red';
-        }
+        checkSubscription(vid)
       })
     });
 
@@ -275,15 +298,19 @@ function handlePlaylistVideos(data) {
       document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1`;
       document.querySelector(".video-popup .video iframe + .title").innerHTML = vid.dataset.title;
       document.querySelector(".video-popup .video .sub").setAttribute("data-channel", vid.dataset.channel);
-      if(channels.find((el) => el.id == vid.dataset.channel)) {
-        document.querySelector(".video-popup .video .sub").innerHTML = "subscribed";
-        document.querySelector(".video-popup .video .sub").style.background='#777';
-      } else {
-        document.querySelector(".video-popup .video .sub").innerHTML = "subscribe";
-        document.querySelector(".video-popup .video .sub").style.background='red';
-      }
+      checkSubscription(vid);
       getSuggestedVideos(vid.dataset.id);
     })
   });
 
+}
+
+function checkSubscription(vid) {
+  if(channels.find((el) => el.id == vid.dataset.channel)) {
+    document.querySelector(".video-popup .video .sub").innerHTML = "subscribed";
+    document.querySelector(".video-popup .video .sub").style.background='#777';
+  } else {
+    document.querySelector(".video-popup .video .sub").innerHTML = "subscribe";
+    document.querySelector(".video-popup .video .sub").style.background='red';
+  }
 }

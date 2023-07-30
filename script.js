@@ -189,15 +189,14 @@ handleSearch("Javasript in arabic - elzero web school");
 let isVideo = false;
 function getVideos(data)  {
   
-  isVideo = data.items[0].id.kind.includes("playlist") ? false : true;
   videosContainer.innerHTML = '';
   
+  
   data.items.forEach((item) => {
-    let test = item.id.kind.includes("playlist") ? true : false;
-    console.log(item);
+    isVideo = item.id.kind.includes("playlist") ? false : true;
     videosContainer.innerHTML += `
-    <div class="box" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
-      <div class='image' data-playlist="${test}">
+    <div class="box" data-playlist="${!isVideo}" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
+      <div class='image' data-playlist="${!isVideo}">
         <img src="${item.snippet.thumbnails.high.url}" alt="">
       </div>
     <div class="description">
@@ -214,7 +213,7 @@ function getVideos(data)  {
   
   videosContainer.querySelectorAll(".box").forEach((vid) => {
     vid.addEventListener("click", (e) => {
-        if(isVideo) {
+        if(vid.dataset.playlist == "false") {
           document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1&enablejsapi=1&modestbranding=1`;
           document.querySelector(".video-popup iframe + .title").innerHTML = vid.dataset.title;
           getSuggestedVideos(vid.dataset.id);
@@ -270,11 +269,9 @@ async function getSuggestedVideos(id) {
 
 function handlePlaylistVideos(data) {
 
-
-  if(!isVideo) {
-    console.log("PLaylist");
-    document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${data.items[0].snippet.resourceId?.videoId || data.items[0].id.videoId}?rel=0&autoplay=1`
-    document.querySelector(".video-popup iframe + .title").innerHTML = data.items[0].snippet.title + ' ' + data.items[0].snippet.publishedAt.split("T")[0];
+  if(!data.items[0].id.kind?.includes("video")) {
+      document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${data.items[0].snippet.resourceId?.videoId || data.items[0].id.videoId}?rel=0&autoplay=1`
+      document.querySelector(".video-popup iframe + .title").innerHTML = data.items[0].snippet.title + ' ' + data.items[0].snippet.publishedAt.split("T")[0];
   }
 
   list.innerHTML = '';

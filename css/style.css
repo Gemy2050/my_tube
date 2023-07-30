@@ -244,7 +244,7 @@ header .right a:hover {
   overflow: hidden;
   margin-bottom: 10px;
 }
-.content-area .content .box .image[data-playlist="false"]::before {
+.content-area .content .box[data-playlist="false"] .image::before {
   display: none;
 }
 .content-area .content .box .image::before {
@@ -305,7 +305,6 @@ header .right a:hover {
   height: 100%;
   top: 56px;
   background-color: var(--main-bg);
-  transition: .5s .2s;
   overflow: hidden;
   display: flex;
   justify-content: center;

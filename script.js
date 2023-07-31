@@ -4,14 +4,15 @@ let bars = document.querySelector("header .left i");
 let searchInput = document.querySelector("input.search");
 
 
-let channels = localStorage.getItem("channels") ? JSON.parse(localStorage.getItem("channels")) : []
+let channels = localStorage.getItem("channels") ? JSON.parse(localStorage.getItem("channels")) : [];
+let history = localStorage.getItem("history") ? JSON.parse(localStorage.getItem("history")) : [];
 
 if(localStorage.getItem("mode") == "light") {
   document.querySelector(".navbar .mode").classList.add("light")
 } else {
   document.querySelector(".navbar .mode").classList.remove("light");
 }
-checkMode()
+checkMode();
 
 
 const options = {
@@ -22,6 +23,9 @@ const options = {
   },
 };
 
+window.onload = () => {
+  document.body.classList.remove("load");
+}
 
 window.onscroll = ()=> {
   if(!document.querySelector(".video-popup").classList.contains("hide"))
@@ -32,13 +36,19 @@ bars.onclick = () => {
   document.querySelector(".navbar").classList.toggle("hide")
 }
 
+document.querySelectorAll(".navbar .option:not(.mode)").forEach((el) => {
+  el.addEventListener("click", (e) => {
+    document.querySelector(".option.active").classList.remove("active");
+    e.target.classList.add("active");
+  })
+})
+
 document.querySelector(".video-popup .close").onclick = function() {
   document.body.style.overflow = 'auto';
   this.parentElement.classList.add("hide");
   document.querySelector(".video > iframe").src = '';
   document.querySelector(".video > .title").innerHTML = '';
   list.innerHTML = '';
-  
 }
 document.querySelector(".input-parent .close").onclick = function() {
   document.querySelector(".input-parent").classList.remove("show")
@@ -75,13 +85,56 @@ document.addEventListener("click", (e) => {
   }
 })
 
+
+document.querySelector("iframe").onload = function() {
+  if(['', "http://127.0.0.1:5500/"].includes(this.src) || history.find((el) => el.src == this.src)) {
+    return false;
+  }
+  history.push(
+    {
+      src: this.src,
+      img: this.getAttribute("thumb").substring(0, this.getAttribute("thumb").lastIndexOf("/"))+"/hqdefault.jpg",
+      title: document.querySelector("iframe + .title").innerHTML,
+      channelId: document.querySelector("iframe + .title + .sub").getAttribute("data-channel"),
+      videoId: this.src.substring(this.src.indexOf("embed/")+6 , this.src.indexOf("?"))
+    }
+    );
+    localStorage.setItem("history", JSON.stringify(history))
+}
+function getHistoryVideos(data) {
+
+  history.length = history.length > 50 ? 50 : history.length;
+
+
+  videosContainer.innerHTML = '';
+
+  data.forEach((el) => {
+    videosContainer.innerHTML += `
+      <div class="box" data-playlist="false" data-channel='${el.channelId}' data-id=${el.videoId} >
+        <div class='image'>
+          <img src="${el.img}" alt="">
+        </div>
+        <div class="description">
+          <div class="text">
+            <p>${el.title}</p>
+          </div>
+        </div>
+      </div>
+      `
+  })
+}
+
+document.querySelector(".history").onclick = function () {
+  getHistoryVideos(history.reverse())
+}
+
+
 document.querySelector(".navbar .mode").onclick = function () {
 
   this.classList.toggle("light");
   checkMode();
 
 }
-
 
 
 function checkMode()  {
@@ -179,6 +232,7 @@ async function getChannelVidoes(id) {
     const response = await fetch(url, options);
     const result = await response.json();
     getVideos(result);
+    document.querySelector(".video-popup .close").click()
   } catch (error) {
     console.error(error);
   }
@@ -186,9 +240,9 @@ async function getChannelVidoes(id) {
 
 handleSearch("Javasript in arabic - elzero web school");
 
-let isVideo = false;
 function getVideos(data)  {
   
+  let isVideo = false;
   videosContainer.innerHTML = '';
   
   
@@ -197,7 +251,7 @@ function getVideos(data)  {
       isVideo = item.id.kind.includes("playlist") ? false : true;
 
     videosContainer.innerHTML += `
-    <div class="box" data-playlist="${!isVideo}" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} data-title='${item.snippet.title} . ( ${item.snippet.publishTime.split("T")[0]} )'>
+    <div class="box" data-playlist="${!isVideo}" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} >
       <div class='image' data-playlist="${!isVideo}">
         <img src="${item.snippet.thumbnails.high.url}" alt="">
       </div>
@@ -212,6 +266,7 @@ function getVideos(data)  {
     `
     
   });
+
   
   videosContainer.querySelectorAll(".box").forEach((vid) => {
     vid.addEventListener("click", (e) => {
@@ -219,8 +274,9 @@ function getVideos(data)  {
         getChannelVidoes(vid.dataset.channel);
         return false;
       } else if(vid.dataset.playlist == "false") {
+          document.querySelector(".video-popup iframe").setAttribute("thumb", vid.querySelector("img").src);
           document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1&enablejsapi=1&modestbranding=1`;
-          document.querySelector(".video-popup iframe + .title").innerHTML = vid.dataset.title;
+          document.querySelector(".video-popup iframe + .title").innerHTML = vid.querySelector(".description p").innerHTML + `<p class='info'>${vid.querySelector(".description span").innerHTML}</p>`;
           getSuggestedVideos(vid.dataset.id);
         } else {
           getPlaylistVideos(vid.dataset.id);
@@ -231,8 +287,9 @@ function getVideos(data)  {
       })
     });
 
-  window.scrollTo({top: 0, behavior: "smooth"})
 
+  window.scrollTo({top: 0, behavior: "smooth"})
+  
 }
 
 
@@ -275,15 +332,16 @@ async function getSuggestedVideos(id) {
 
 function handlePlaylistVideos(data) {
 
+
   if(!data.items[0].id.kind?.includes("video")) {
       document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${data.items[0].snippet.resourceId?.videoId || data.items[0].id.videoId}?rel=0&autoplay=1`
-      document.querySelector(".video-popup iframe + .title").innerHTML = data.items[0].snippet.title + ' ' + data.items[0].snippet.publishedAt.split("T")[0];
+      document.querySelector(".video-popup .video iframe + .title").innerHTML = data.items[0].snippet.title + `<p class='info'>${data.items[0].snippet.channelTitle +' . '+ data.items[0].snippet.publishedAt.split("T")[0]}</p>`;;
   }
 
   list.innerHTML = '';
   data.items.forEach((item, i) => {
     list.innerHTML += `
-      <div class='video' data-channel=${item.snippet.channelId} data-id=${item.snippet.resourceId?.videoId || item.id.videoId} data-title='${item.snippet.title} . ( ${item.snippet.publishedAt.split("T")[0]} )'>
+      <div class='video' data-channel=${item.snippet.channelId} data-id=${item.snippet.resourceId?.videoId || item.id.videoId} data-date='${item.snippet.publishedAt.split("T")[0]}'>
         <span class='num'>${i+1}</span>
         <div class='content'>
           <div>
@@ -298,8 +356,9 @@ function handlePlaylistVideos(data) {
 
   document.querySelectorAll(".list .videos .video").forEach((vid) => {
     vid.addEventListener("click", (e) => {
+      document.querySelector(".video-popup iframe").setAttribute("thumb", vid.querySelector("img").src);
       document.querySelector(".video-popup iframe").src = `https://www.youtube.com/embed/${vid.dataset.id}?rel=0&autoplay=1`;
-      document.querySelector(".video-popup .video iframe + .title").innerHTML = vid.dataset.title;
+      document.querySelector(".video-popup .video iframe + .title").innerHTML = vid.querySelector(".content .title").innerHTML + `<p class='info'>${vid.querySelector(".content span").innerHTML +' . '+ vid.dataset.date.split("T")[0]}</p>`;;
       document.querySelector(".video-popup .video .sub").setAttribute("data-channel", vid.dataset.channel);
       checkSubscription(vid);
       getSuggestedVideos(vid.dataset.id);

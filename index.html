@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
 </head>
-<body>
+<body class="load">
+  <span class="loader"></span>
     <header>
       <div class="left">
         <i class="fas fa-bars"></i>
@@ -40,11 +41,11 @@
 
     <div class="content-area">
       <div class="navbar hide">
-        <a href="#" class="">
+        <a class="option active" onclick="handleSearch('Javasript in arabic - elzero web school');">
           <i class="fa fa-home"></i>
           <span>Home</span>
         </a>
-        <a href="#">
+        <a class="option" onclick="handleSearch('shorts - شورتس')">
           <i class="fas fa-file-video"></i>
           <span>Shorts</span>
         </a>
@@ -52,33 +53,33 @@
           <i class="fa-solid fa-video"></i>
           <span>Subscriptions</span>
         </a> -->
-        <a href="#" class="mode">
+        <a  class="mode option">
           <i class="fa-solid fa-moon moon"></i>
           <i class="fa-solid fa-sun sun"></i>
           <span>Switch Mode</span>
         </a>
         <hr>
-        <a href="#">
-          <i class="fa-regular fa-circle-play"></i>
-          <span>Library</span>
-        </a>
-        <a href="#">
+        <a  class="history option">
           <i class="fa-solid fa-clock-rotate-left"></i>
           <span>History</span>
         </a>
-        <a href="#">
+        <a  class="watch-later option">
           <i class="fa-regular fa-clock"></i>
           <span>Watched Later</span>
         </a>
-        <a href="#">
+        <a class="option">
+          <i class="fa-regular fa-circle-play"></i>
+          <span>Library</span>
+        </a>
+        <a  class="option">
           <i class="fa-solid fa-list"></i>
           <span>List</span>
         </a>
-        <a href="#">
+        <a class="option">
           <i class="fas fa-download"></i>
           <span>Downloads</span>
         </a>
-        <a href="#">
+        <a  class="option">
           <i class="fas fa-thumbs-up"></i>
           <span>Liked Videos</span>
         </a>
@@ -236,7 +237,7 @@
             </div>
         </div>
         <div class="video">
-          <iframe src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen autoplay></iframe>
+          <iframe  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen autoplay></iframe>
           <div class="title"></div>
           <button class="sub">subscribe</button>
         </div>

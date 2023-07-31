@@ -16,7 +16,7 @@ body {
   background-color: var(--main-bg);
 }
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #c8c7c7;
@@ -32,6 +32,35 @@ body {
 .list::-webkit-scrollbar {
   width: 5px;
 }
+.loader {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: load 1.5s alternate infinite;
+  display: none;
+}
+body.load > *:not(.loader){
+  display: none;
+}
+body.load .loader {
+  display: block;
+}
+
+@keyframes load {
+
+  100% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+
 
 header {
   display: flex;
@@ -204,6 +233,9 @@ header .right a:hover {
   transition: .3s;
   cursor: pointer;
 }
+.content-area .navbar a * {
+  pointer-events: none;
+}
 .content-area .navbar a.active,
 .content-area .navbar a:hover {
   background-color: #888;
@@ -286,9 +318,11 @@ header .right a:hover {
   margin-bottom: 5px;
   color: var(--main-color);
 }
-.content-area .content .box .text span {
+.content-area .content .box .text span, 
+.content-area .content .box .text .info {
   color: #777;
   font-size: 14px;
+  margin-top: 5px;
 }
 
 
@@ -310,7 +344,7 @@ header .right a:hover {
   display: flex;
   justify-content: center;
   gap: 10px;
-  padding: 30px 30px;
+  padding: 20px 30px;
 }
 .video-popup.hide {
   display: none;
@@ -419,9 +453,14 @@ header .right a:hover {
   }
 }
 .video-popup .video div.title {
-  font-size: 20px;
+  font-size: 18.5px;
   padding: 10px;
   color: var(--main-color) !important;
+}
+.video-popup .video .title .info {
+  color: #777;
+  font-size: 15px;
+  margin-top: 5px;
 }
 .video-popup .list {
   background-color: var(--main-bg);

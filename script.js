@@ -93,8 +93,9 @@ document.addEventListener("click", (e) => {
 })
 
 
+console.log(document.querySelector(".video-popup iframe").src);
 document.querySelector("iframe").onload = function() {
-  if(['', "http://127.0.0.1:5500/"].includes(this.src) || history.find((el) => el.src == this.src)) {
+  if(['', location.href].includes(this.src) || history.find((el) => el.src == this.src)) {
     return false;
   }
   history.unshift(

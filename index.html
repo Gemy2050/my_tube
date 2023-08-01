@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Youtube Clone App">
+  <meta name="keywords" content="youTube video api">
+  
   <title>Youtube Clone</title>
   <link rel="shortcut icon" href="images/icon.png" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,10 +28,10 @@
           <div class="input-parent">
             <div class="close">x</div>
             <input type="search" class="search-phone" placeholder="Search" spellcheck="false" autofocus>
-            <button class="search-btn"><i class="fas fa-search"></i></button>
+            <button class="search-btn" aria-label="search-btn"><i class="fas fa-search"></i></button>
           </div>
           <input type="search" class="search" placeholder="Search" spellcheck="false">
-          <button class="search"><i class="fas fa-search"></i></button>
+          <button class="search" aria-label="search-btn"><i class="fas fa-search"></i></button>
           <!-- <i class="fas fa-microphone microphone" ></i> -->
         </div>
       </div>
@@ -41,7 +44,7 @@
 
     <div class="content-area">
       <div class="navbar hide">
-        <a class="option active" onclick="handleSearch('Javasript in arabic - elzero web school');">
+        <a class="option home active" onclick="handleSearch('Javasript in arabic - elzero web school');">
           <i class="fa fa-home"></i>
           <span>Home</span>
         </a>
@@ -90,7 +93,7 @@
         <hr>
         <h4 style="color: var(--main-color);">Subscriptions</h4>
         <div class="subs">
-          <a href="">
+          <!-- <a href="">
             <img src="images/img2.jpeg" alt="">
             <span>FC Barcelona</span>
           </a>
@@ -109,7 +112,7 @@
           <a href="">
             <img src="images/cover1.jpeg" alt="">
             <span>Bahget Saber</span>
-          </a>
+          </a> -->
         </div>
       </div>
       <div class="content">
@@ -237,7 +240,7 @@
             </div>
         </div>
         <div class="video">
-          <iframe  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen autoplay></iframe>
+          <iframe loading="lazy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen autoplay></iframe>
           <div class="title"></div>
           <button class="sub">subscribe</button>
         </div>

@@ -3,9 +3,18 @@ let list = document.querySelector(".list .videos");
 let bars = document.querySelector("header .left i");
 let searchInput = document.querySelector("input.search");
 
+const options = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Key": "bd5cdb1a6amshecd19532205b490p1d2eb9jsnf956dd875128",
+    "X-RapidAPI-Host": "youtube-v31.p.rapidapi.com",
+  },
+};
+
 
 let channels = localStorage.getItem("channels") ? JSON.parse(localStorage.getItem("channels")) : [];
 let history = localStorage.getItem("history") ? JSON.parse(localStorage.getItem("history")) : [];
+
 
 if(localStorage.getItem("mode") == "light") {
   document.querySelector(".navbar .mode").classList.add("light")
@@ -15,13 +24,11 @@ if(localStorage.getItem("mode") == "light") {
 checkMode();
 
 
-const options = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": "bd5cdb1a6amshecd19532205b490p1d2eb9jsnf956dd875128",
-    "X-RapidAPI-Host": "youtube-v31.p.rapidapi.com",
-  },
-};
+
+  handleSearch("Javasript in arabic - elzero web school");
+
+
+
 
 window.onload = () => {
   document.body.classList.remove("load");
@@ -90,7 +97,7 @@ document.querySelector("iframe").onload = function() {
   if(['', "http://127.0.0.1:5500/"].includes(this.src) || history.find((el) => el.src == this.src)) {
     return false;
   }
-  history.push(
+  history.unshift(
     {
       src: this.src,
       img: this.getAttribute("thumb").substring(0, this.getAttribute("thumb").lastIndexOf("/"))+"/hqdefault.jpg",
@@ -112,7 +119,7 @@ function getHistoryVideos(data) {
     videosContainer.innerHTML += `
       <div class="box" data-playlist="false" data-channel='${el.channelId}' data-id=${el.videoId} >
         <div class='image'>
-          <img src="${el.img}" alt="">
+          <img loading="lazy" src="${el.img}" alt="picture">
         </div>
         <div class="description">
           <div class="text">
@@ -125,9 +132,9 @@ function getHistoryVideos(data) {
 }
 
 document.querySelector(".history").onclick = function () {
-  getHistoryVideos(history.reverse())
+  document.querySelector(".video-popup .close").click();
+  getHistoryVideos(history)
 }
-
 
 document.querySelector(".navbar .mode").onclick = function () {
 
@@ -160,7 +167,7 @@ function setSubscribtions() {
   channels.forEach((channel) => {
     document.querySelector(".subs").innerHTML += `
       <a  data-channel=${channel.id} onclick="getChannelVidoes('${channel.id}')">
-        <img src="${channel.img.url}" alt="picture">
+        <img loading="lazy" src="${channel.img.url}" alt="picture">
         <span>${channel.title}</span>
       </a>
       `
@@ -238,7 +245,7 @@ async function getChannelVidoes(id) {
   }
 }
 
-handleSearch("Javasript in arabic - elzero web school");
+
 
 function getVideos(data)  {
   
@@ -248,12 +255,13 @@ function getVideos(data)  {
   
   data.items.forEach((item) => {
 
-      isVideo = item.id.kind.includes("playlist") ? false : true;
+
+  isVideo = item.id.kind.includes("playlist") ? false : true;
 
     videosContainer.innerHTML += `
     <div class="box" data-playlist="${!isVideo}" data-channel='${item.snippet.channelId}' data-id=${item.id.videoId || item.id.playlistId} >
       <div class='image' data-playlist="${!isVideo}">
-        <img src="${item.snippet.thumbnails.high.url}" alt="">
+        <img loading="lazy" src="${item.snippet.thumbnails.high.url}" alt="pictue">
       </div>
     <div class="description">
     
@@ -300,7 +308,7 @@ async function handleSearch(text) {
     const response = await fetch(url, options);
     const result = await response.json();
     getVideos(result);
-    document.querySelector(".video-popup").classList.add("hide");
+    document.querySelector(".video-popup .close").click();
   } catch (error) {
     console.error(error);
   }
@@ -348,7 +356,7 @@ function handlePlaylistVideos(data) {
             <p class='title'>${item.snippet.title}</p>
             <span>${item.snippet.channelTitle}</span>
           </div>
-          <img src='${item.snippet.thumbnails.maxres?.url || item.snippet.thumbnails.high?.url}' />
+          <img loading="lazy" src='${item.snippet.thumbnails.maxres?.url || item.snippet.thumbnails.high?.url}' alt="picture"/>
         </div>
       </div>
     `

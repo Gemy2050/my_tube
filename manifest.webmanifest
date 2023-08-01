@@ -30,11 +30,16 @@
           "type": "image/png"
       }
   ],
-  "shortcuts":[
-      {
-          "name": "New Videos",
-          "url":"/",
-          "icon":"./images/icon.png"
-      }
+  "shortcuts": [
+    {
+      "name": "Club",
+      "url": "https://gemy2050.github.io/club/",
+      "icon": "https://gemy2050.github.io/club/logo.jpg"
+    },
+    {
+      "name": "Mytube",
+      "url": "https://gemy2050.github.io/my_tube/",
+      "icon": "./images/icon.png"
+    }
   ]
 }
